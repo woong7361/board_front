@@ -46,33 +46,27 @@ const comments = ref(
         },
       ]}
 );
-const files = ref([{
-  fileId: '',
-  freeBoardId: '',
-  originalName: ''
-}]);
 
-const commentFormData = ref({
-  content: ''
-});
 
 const dialog = ref({
   board: false,
   comment: false
 })
 
-watchEffect(
-    () => getFreeBoard()
-)
+const commentFormData = ref({
+  content: ''
+});
 
-watchEffect(
-    () => getComments()
-)
+const files = ref([{
+  fileId: '',
+  freeBoardId: '',
+  originalName: ''
+}]);
 
-watchEffect(
-    () => getFiles()
-)
-
+/**
+ * 댓글 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submitComment() {
   const response = await createFreeBoardCommentApi(route.params.freeBoardId, commentFormData.value)
 
@@ -82,10 +76,19 @@ async function submitComment() {
   }
 }
 
+/**
+ * 파일 다운로드
+ * @param fileId 파일 식별자
+ * @returns {Promise<void>} 파일 byte stream
+ */
 async function fileDownload(fileId) {
   await downloadFileApi(fileId)
 }
 
+/**
+ * 게시글 삭제
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function deleteBoard() {
   const response = await deleteFreeBoardApi(route.params.freeBoardId)
     .catch(() => {dialog.value.board = true})
@@ -95,6 +98,11 @@ async function deleteBoard() {
   }
 }
 
+/**
+ * 댓글 삭제
+ * @param commentId 댓글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function deleteComment(commentId) {
   const response = await deleteCommentApi(commentId)
     .catch(() => {dialog.value.comment = true})
@@ -104,6 +112,9 @@ async function deleteComment(commentId) {
   }
 }
 
+/**
+ * 검색페이지로 이동
+ */
 function goList() {
   router.push({
     name: FREE_BOARD_LIST_ROUTER_NAME,
@@ -113,6 +124,9 @@ function goList() {
   })
 }
 
+/**
+ * 수정페이지로 이동
+ */
 function goEdit() {
   router.push({
     name: FREE_BOARD_EDIT_ROUTER_NAME,
@@ -120,20 +134,42 @@ function goEdit() {
   })
 }
 
+/**
+ * 자유게시판 게시글 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getFreeBoard() {
   const response = await getFreeBoardApi(route.params.freeBoardId);
   freeBoard.value = response.data
 }
+watchEffect(
+  () => getFreeBoard()
+)
 
+/**
+ * 자유게시판 게시글 댓글 조회
+ * @returns {Promise<void>}서버 응답값
+ */
 async function getComments() {
   const response = await getFreeBoardCommentsApi(route.params.freeBoardId)
   comments.value = response.data
 }
+watchEffect(
+  () => getComments()
+)
 
+/**
+ * 자유게시판 게시글 파일 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getFiles() {
   const response = await getFreeBoardFilesApi(route.params.freeBoardId)
   files.value = response.data
 }
+watchEffect(
+  () => getFiles()
+)
+
 </script>
 
 <template>

@@ -57,6 +57,17 @@ watchEffect(() => {
 })
 
 
+/**
+ * 문의 게시판 게시글 검색
+ * @param params 게시글 검색 파라미터
+ * @returns {Promise<void>} 서버 응답값
+ */
+async function getInquireBoards(params) {
+  const response = await getInquireBoardsApi(params)
+
+  inquireBoards.value = response.data
+}
+
 watchEffect(
     () => {
       route.query.size = route.query.size ? route.query.size : import.meta.env.VITE_DEFAULT_PAGE_SIZE
@@ -66,13 +77,10 @@ watchEffect(
     }
 )
 
-async function getInquireBoards(params) {
-  const response = await getInquireBoardsApi(params)
 
-  inquireBoards.value = response.data
-}
-
-
+/**
+ * 검색 버튼을 눌렀을때 검색 페이지로 리로딩
+ */
 function search() {
   router.push({
     name: INQUIRE_BOARD_LIST_ROUTER_NAME,
@@ -82,9 +90,11 @@ function search() {
       endDate: dateToServerDateTimeFormat(adapter.addDays(searchParams.value.endDate, 1), adapter),
     }
   })
-
 }
 
+/**
+ * 문의게시판 생성 폼 페이지로 이동
+ */
 function goCreate() {
   router.push({
     name: INQUIRE_BOARD_FORM_ROUTER_NAME
@@ -92,6 +102,11 @@ function goCreate() {
   )
 }
 
+/**
+ * 문의 게시글 상세보기 페이지로 이동
+ * @param inquireBoardId 게시글 식별자
+ * @param isAllow 권한 여부
+ */
 function goDetail(inquireBoardId, isAllow) {
   if (isAllow) {
     router.push({
@@ -104,6 +119,10 @@ function goDetail(inquireBoardId, isAllow) {
   }
 }
 
+/**
+ * 검색 페이지 이동
+ * @param pageNum 페이시 넘버
+ */
 function goPage(pageNum) {
   router.push({
     name: INQUIRE_BOARD_LIST_ROUTER_NAME,

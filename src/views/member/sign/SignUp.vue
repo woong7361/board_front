@@ -43,6 +43,9 @@ async function submit() {
   }
 }
 
+/**
+ * 회원가입 성공시 로그인 페이지로 이동
+ */
 watchEffect(() => {
   if (dialog.value.signUpSuccess === false) {
     router.push({
@@ -51,6 +54,9 @@ watchEffect(() => {
   }
 })
 
+/**
+ * 로그인 페이지로 이동
+ */
 function goSignIn() {
   router.push({
     name: MEMBER_SIGN_IN_ROUTER_NAME}

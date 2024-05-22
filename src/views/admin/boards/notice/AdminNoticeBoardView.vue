@@ -36,12 +36,20 @@ watchEffect(
     () => getNoticeBoard(route.params.noticeBoardId)
 )
 
+/**
+ * 공지 게시글 조회
+ * @param noticeBoardId 게시글 식별자
+ * @return {Promise<void>} 서버 응답값
+ */
 async function getNoticeBoard(noticeBoardId) {
   const response = await getNoticeBoardApi(noticeBoardId)
 
   noticeBoard.value = response.data
 }
 
+/**
+ * 공지 검색 페이지로 이동
+ */
 function goList() {
   router.push({
     name: ADMIN_NOTICE_BOARD_LIST_ROUTER_NAME,
@@ -51,6 +59,9 @@ function goList() {
   })
 }
 
+/**
+ * 공지 수정 페이지로 이동
+ */
 function goEdit() {
   router.push({
     name: ADMIN_NOTICE_BOARD_EDIT_ROUTER_NAME,
@@ -62,6 +73,10 @@ function goEdit() {
 
 }
 
+/**
+ * 공지 게시글 삭제
+ * @return {Promise<void>} 서버 응답값
+ */
 async function deleteBoard() {
   const response = await deleteNoticeBoardByAdminAPi(route.params.noticeBoardId)
     .catch(() => {dialog.value = true})

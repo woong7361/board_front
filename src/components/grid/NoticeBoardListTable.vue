@@ -1,5 +1,6 @@
 <script setup>
 import {ADMIN_FREE_BOARD_LIST_ROUTE_URL, NOTICE_BOARD_VIEW_ROUTE_URL} from "@/constant/routeUrlConstant";
+import {blankDateFormat} from "@/compositor/dateFormat";
 
   const props = defineProps(['fixedBoards', 'noneFixedBoards']);
   const emits = defineEmits(['goDetail'])
@@ -31,8 +32,8 @@ import {ADMIN_FREE_BOARD_LIST_ROUTE_URL, NOTICE_BOARD_VIEW_ROUTE_URL} from "@/co
         </td>
         <td class="text-center"> {{board.memberName}} </td>
         <td class="text-center"> {{board.views}} </td>
-        <td class="text-center"> {{board.createdAt}} </td>
-        <td class="text-center"> {{board.modifiedAt}} </td>
+        <td class="text-center"> {{blankDateFormat(board.createdAt)}} </td>
+        <td class="text-center"> {{blankDateFormat(board.modifiedAt)}} </td>
       </tr>
 
       <tr v-for="board in props.noneFixedBoards">
@@ -42,8 +43,8 @@ import {ADMIN_FREE_BOARD_LIST_ROUTE_URL, NOTICE_BOARD_VIEW_ROUTE_URL} from "@/co
         </td>
         <td class="text-center"> {{board.memberName}} </td>
         <td class="text-center"> {{board.views}} </td>
-        <td class="text-center"> {{board.createdAt}} </td>
-        <td class="text-center"> {{board.modifiedAt}} </td>
+        <td class="text-center"> {{blankDateFormat(board.createdAt)}} </td>
+        <td class="text-center"> {{blankDateFormat(board.modifiedAt)}} </td>
       </tr>
       </tbody>
     </v-table>

@@ -8,11 +8,14 @@ import {
   MEMBER_SIGN_UP_ROUTER_NAME
 } from "@/constant/routeNames";
 
-// const baseUrl = `http://13.125.243.251:8888`
-const baseUrl = `http://localhost:8888`
+// const baseUrl = `http://43.203.214.51:8888`
+// const baseUrl = `http://localhost:8888`
+const baseUrl = import.meta.env.VITE_API_URL
+
 export const memberApiInstance = axios.create({
   baseURL: baseUrl,
 })
+
 
 memberApiInstance.interceptors.request.use(
   function (config) {
@@ -26,22 +29,23 @@ memberApiInstance.interceptors.request.use(
   },
 );
 
+
 memberApiInstance.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
 
   if (error.response.status === 403) {
-    router.push({
+    router.replace({
       name: ERROR_ROUTER_NAME,
       query: {statusCode: 403}
     })
   } else if(error.response.status === 404) {
-    router.push({
+    router.replace({
       name: ERROR_ROUTER_NAME,
       query: {statusCode: 404}
     })
   } else if(error.response.status === 500) {
-    router.push({
+    router.replace({
       name: ERROR_ROUTER_NAME,
       query: {statusCode: 500}
     })
@@ -61,17 +65,17 @@ adminApiInstance.interceptors.response.use(function (response) {
 }, function (error) {
 
   if (error.response.status === 401) {
-    router.push({
+    router.replace({
       name: ERROR_ROUTER_NAME,
       query: {statusCode: 401, admin: true}
     })
   } else if(error.response.status === 404) {
-    router.push({
+    router.replace({
       name: ERROR_ROUTER_NAME,
       query: {statusCode: 404, admin: true}
     })
   } else if(error.response.status === 500) {
-    router.push({
+    router.replace({
       name: ERROR_ROUTER_NAME,
       query: {statusCode: 500, admin: true}
     })

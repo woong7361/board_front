@@ -58,7 +58,7 @@ function goDetail(freeBoardId) {
             {{ blankDateFormat(board.createdAt) }}
           </td>
           <td class="text-center">
-            {{ board.modifiedAt }}
+            {{ blankDateFormat(board.modifiedAt) }}
           </td>
         </tr>
         </tbody>

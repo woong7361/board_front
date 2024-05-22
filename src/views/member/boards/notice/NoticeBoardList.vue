@@ -40,20 +40,10 @@ const searchParams = ref({
 })
 
 
-watchEffect(
-    () => getFixedNoticeBoards()
-)
-
-watchEffect(
-    () => {
-      route.query.size = route.query.size ? route.query.size : import.meta.env.VITE_DEFAULT_PAGE_SIZE
-      route.query.currentPage = route.query.currentPage ? route.query.currentPage : import.meta.env.VITE_DEFAULT_PAGE
-
-      getNoneFixedNoticeBoards(route.query)
-      getCategories()
-    }
-)
-
+/**
+ * 고정 공지 게시글 리스트 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getFixedNoticeBoards() {
   const response = await getFixedNoticeBoardsApi()
 
@@ -61,17 +51,42 @@ async function getFixedNoticeBoards() {
     fixedNoticeBoards.value = response.data.fixedNoticeBoards;
   }
 }
+watchEffect(
+  () => getFixedNoticeBoards()
+)
 
+/**
+ * 고정 공지를 제외한 공지 게시글 검색
+ * @param params 검색 파라미터
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getNoneFixedNoticeBoards(params) {
   const response = await getNoneFixedNoticeBoardsApi(params)
 
   noneFixedNoticeBoards.value = response.data
 }
 
+/**
+ * 공지 게시판 카테고리 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getCategories() {
   categories.value = await getNoticeBoardCategories()
 }
 
+watchEffect(
+  () => {
+    route.query.size = route.query.size ? route.query.size : import.meta.env.VITE_DEFAULT_PAGE_SIZE
+    route.query.currentPage = route.query.currentPage ? route.query.currentPage : import.meta.env.VITE_DEFAULT_PAGE
+
+    getNoneFixedNoticeBoards(route.query)
+    getCategories()
+  }
+)
+
+/**
+ * 검색조건이 변경시 검색페이지 리로딩
+ */
 function search() {
   router.push({
     name: NOTICE_BOARD_LIST_ROUTER_NAME,
@@ -83,9 +98,11 @@ function search() {
   })
 }
 
-
+/**
+ * 공지 게시판 상세보기 페이지로 이동
+ * @param noticeBoardId 게시글 식별자
+ */
 function goDetail(noticeBoardId) {
-
   router.push({
     name: NOTICE_BOARD_VIEW_ROUTER_NAME,
     params: {noticeBoardId: noticeBoardId},
@@ -93,6 +110,10 @@ function goDetail(noticeBoardId) {
   })
 }
 
+/**
+ * 검색 페이지 이동
+ * @param pageNum 페이지 넘버
+ */
 function goPage(pageNum) {
   router.push({
     name: NOTICE_BOARD_LIST_ROUTER_NAME,

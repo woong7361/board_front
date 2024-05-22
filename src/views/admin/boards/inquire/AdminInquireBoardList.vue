@@ -64,6 +64,11 @@ watchEffect(
     }
 )
 
+/**
+ * 문의게시판 게시글 검색
+ * @param params 검색 파라미터
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getInquireBoards(params) {
   const response = await getInquireBoardsApi(params)
 
@@ -71,6 +76,9 @@ async function getInquireBoards(params) {
 }
 
 
+/**
+ * 검색시 검색 페이지 리로딩
+ */
 function search() {
   router.push({
     name: ADMIN_INQUIRE_BOARD_LIST_ROUTER_NAME,
@@ -82,6 +90,10 @@ function search() {
   })
 }
 
+/**
+ * 게시글 상세보기 페이지로 이동
+ * @param inquireBoardId 게시글 식별자
+ */
 function goDetail(inquireBoardId) {
   router.push({
     name: ADMIN_INQUIRE_BOARD_VIEW_ROUTER_NAME,
@@ -90,6 +102,10 @@ function goDetail(inquireBoardId) {
   })
 }
 
+/**
+ * 검색 페이지 이동
+ * @param pageNum 페이지 넘버
+ */
 function goPage(pageNum) {
   router.push({
     name: ADMIN_INQUIRE_BOARD_LIST_ROUTER_NAME,

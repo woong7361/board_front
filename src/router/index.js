@@ -76,11 +76,13 @@ import AdminNoticeBoardEdit from "@/views/admin/boards/notice/AdminNoticeBoardEd
 import AdminInquireBoardView from "@/views/admin/boards/inquire/AdminInquireBoardView.vue";
 import AdminInquireBoardList from "@/views/admin/boards/inquire/AdminInquireBoardList.vue";
 import {useAdminStore, useMemberStore} from "@/store/store";
-import Test from "@/views/Test.vue";
 import Error from "@/views/Error.vue";
 import AdminMainView from "@/views/admin/main/AdminMainView.vue";
 import {getTokenExpiredMillis} from "@/compositor/token";
 
+/**
+ * 회원 권한 확인
+ */
 const requireMemberAuth = () => (from, to, next) => {
   const memberStore = useMemberStore()
 
@@ -97,6 +99,9 @@ const requireMemberAuth = () => (from, to, next) => {
   return next()
 }
 
+/**
+ * token timeout 확인
+ */
 const checkTokenTimeOut = () => (from, to, next) => {
   const memberStore = useMemberStore()
 
@@ -112,6 +117,11 @@ const checkTokenTimeOut = () => (from, to, next) => {
 
   return next();
 }
+
+/**
+ * 관리자 권한 확인
+ * @returns {(function(*, *, *): (*))|*}
+ */
 const requireAdminAuth = () => (from, to, next) => {
   const adminStore = useAdminStore()
 
@@ -287,11 +297,7 @@ const routes = [
         name: ERROR_ROUTER_NAME,
         component: Error,
     },
-    {
-        path: '/test',
-        name: 'test',
-        component: Test,
-    },
+
 ]
 
 const router = createRouter({

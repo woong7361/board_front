@@ -25,8 +25,6 @@ import {getFreeBoardCategories} from "@/compositor/category";
 const route = useRoute();
 const adapter = useDate()
 
-const categories =  ref([ALL_CATEGORY])
-
 const searchParams = ref({
   startDate: adapter.parseISO(searchStartDate()),
   endDate: adapter.parseISO(searchEndDate()),
@@ -61,6 +59,19 @@ const page = ref({
   pageSize: ''
 });
 
+/**
+ * 자유게시판 게시글 검색
+ * @param params 검색 조건
+ * @returns {Promise<void>} 검색 결과
+ */
+async function getFreeBoards(params) {
+  const response = await getFreeBoardsApi(params)
+  page.value = response.data
+}
+
+/**
+ * 변경 감지
+ */
 watchEffect(
     () => {
       route.query.size = route.query.size ? route.query.size : import.meta.env.VITE_DEFAULT_PAGE_SIZE
@@ -71,6 +82,9 @@ watchEffect(
     }
 )
 
+/**
+ * 검색버튼을 눌렀을시 페이지 리로딩
+ */
 function search() {
   router.push({
     name: FREE_BOARD_LIST_ROUTER_NAME,
@@ -82,6 +96,10 @@ function search() {
   })
 }
 
+/**
+ * 게시글 상세보기 페이지로 이동
+ * @param freeBoardId 게시글 식별자
+ */
 function goDetail(freeBoardId) {
   router.push({
         name: FREE_BOARD_VIEW_ROUTER_NAME,
@@ -90,6 +108,10 @@ function goDetail(freeBoardId) {
       })
 }
 
+/**
+ * 검색 페이지 이동
+ * @param pageNum 페이지 넘버
+ */
 function goPage(pageNum) {
   router.push({
     name: FREE_BOARD_LIST_ROUTER_NAME,
@@ -100,6 +122,9 @@ function goPage(pageNum) {
   })
 }
 
+/**
+ * 게시글 생성 폼으로 이동
+ */
 function goCreate() {
   router.push({
     name: FREE_BOARD_FORM_ROUTER_NAME,
@@ -109,12 +134,13 @@ function goCreate() {
   })
 }
 
-async function getFreeBoards(params) {
-  const response = await getFreeBoardsApi(params)
-  page.value = response.data
-}
 
+const categories =  ref([ALL_CATEGORY])
 
+/**
+ * 자유게시판 카테고리 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getCategories() {
   categories.value = await getFreeBoardCategories()
 }

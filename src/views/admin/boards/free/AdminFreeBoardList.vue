@@ -67,6 +67,9 @@ watchEffect(
     }
 )
 
+/**
+ * 검색시 검색 페이지로 리로딩
+ */
 function search() {
   router.push({
     name: ADMIN_FREE_BOARD_LIST_ROUTER_NAME,
@@ -78,6 +81,10 @@ function search() {
   })
 }
 
+/**
+ * 자유게시판 게시글 상세보기 페이지로 이동
+ * @param freeBoardId 게시글 식별자
+ */
 function goDetail(freeBoardId) {
   router.push({
         name: ADMIN_FREE_BOARD_VIEW_ROUTER_NAME,
@@ -86,10 +93,11 @@ function goDetail(freeBoardId) {
       })
 }
 
+/**
+ * 검색 페이지 이동
+ * @param pageNum 페이지 넘버
+ */
 function goPage(pageNum) {
-  console.log(pageNum)
-  console.log(searchParams.value.currentPage)
-
   router.push({
     name: ADMIN_FREE_BOARD_LIST_ROUTER_NAME,
     query: {
@@ -99,6 +107,9 @@ function goPage(pageNum) {
   })
 }
 
+/**
+ * 자유게시판 게시글 생성 페이지로 이동
+ */
 function goCreate() {
   router.push({
     name: ADMIN_FREE_BOARD_FORM_ROUTER_NAME,
@@ -108,11 +119,20 @@ function goCreate() {
   })
 }
 
+/**
+ * 자유게시판 게시글 조회
+ * @param params 검색 파라미터
+ * @returns {Promise<void>} 서버 응답갑
+ */
 async function getFreeBoards(params) {
   const response = await getFreeBoardsApi(params)
   page.value = response.data
 }
 
+/**
+ * 자유게시판 카테고리 조회
+ * @returns {Promise<void>} 서버 응답갑
+ */
 async function getCategories() {
   categories.value = await getFreeBoardCategories()
 }

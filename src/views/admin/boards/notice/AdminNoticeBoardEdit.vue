@@ -17,12 +17,31 @@ const route = useRoute()
 const formValidate = ref(false)
 const dialog = ref(false)
 
+/**
+ * 공지 게시판 카테고리 조회
+ * @type {Ref<UnwrapRef<string[]>>}
+ */
 const categoryList = ref(['공지', '급공지'])
 async function getCategories() {
   const response = await getNoticeBoardCategoriesApi()
   categoryList.value = response.data.categories
 }
 getCategories()
+
+/**
+ * 공지 게시글 조회
+ * @param noticeBoardId 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
+async function getNoticeBoard(noticeBoardId) {
+  const response = await getNoticeBoardApi(noticeBoardId)
+
+  noticeBoard.value = response.data
+}
+watchEffect(
+  () => getNoticeBoard(route.params.noticeBoardId)
+)
+
 
 const noticeBoard = ref({
   category: '',
@@ -31,19 +50,10 @@ const noticeBoard = ref({
   isFixed: false
 })
 
-
-watchEffect(
-  () => getNoticeBoard(route.params.noticeBoardId)
-)
-
-
-async function getNoticeBoard(noticeBoardId) {
-  const response = await getNoticeBoardApi(noticeBoardId)
-
-  noticeBoard.value = response.data
-}
-
-
+/**
+ * 공지 게시글 수정 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   const response = await editNoticeBoardByAdminApi(noticeBoard.value, route.params.noticeBoardId)
     .catch(() => {dialog.value = true})

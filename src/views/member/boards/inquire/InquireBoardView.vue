@@ -29,10 +29,11 @@ const inquireBoard = ref({
 })
 const inquireAnswers = ref([]);
 
-watchEffect(
-    () => getInquireBoard(route.params.inquireBoardId)
-)
-
+/**
+ * 문의게시판 게시글 조회
+ * @param inquireBoardId 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getInquireBoard(inquireBoardId) {
   const response = await getInquireBoardApi(inquireBoardId)
 
@@ -47,7 +48,13 @@ async function getInquireBoard(inquireBoardId) {
     }
   }
 }
+watchEffect(
+  () => getInquireBoard(route.params.inquireBoardId)
+)
 
+/**
+ * 검색 페이지로 이동
+ */
 function goList() {
   router.push(
       {
@@ -56,6 +63,9 @@ function goList() {
       })
 }
 
+/**
+ * 수정 페이지로 이동
+ */
 function goEdit() {
   router.push({
         name: INQUIRE_BOARD_EDIT_ROUTER_NAME
@@ -63,6 +73,10 @@ function goEdit() {
   )
 }
 
+/**
+ * 게시글 삭제
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function deleteBoard() {
   const response = await deleteInquireBoardApi(route.params.inquireBoardId)
     .catch(() => {dialog.value = true})

@@ -20,6 +20,10 @@ const memberStore = useMemberStore()
 
 const dialog =ref(false)
 
+/**
+ * 관리자 로그인 요청
+ * @return {Promise<void>} 서버 응답값
+ */
 async function submit() {
   let response = await adminLoginApi(loginRequest.value)
     .catch(() => {dialog.value = true});

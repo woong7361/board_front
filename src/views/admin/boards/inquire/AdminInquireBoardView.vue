@@ -46,10 +46,12 @@ const inquireAnswerForm = ref({
   answer: ''
 })
 
-watchEffect(
-    () => getInquireBoard(route.params.inquireBoardId)
-)
 
+/**
+ * 문의 게시판 게시글 조회
+ * @param inquireBoardId 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getInquireBoard(inquireBoardId) {
   const response = await getInquireBoardByAdminApi(inquireBoardId)
 
@@ -64,7 +66,13 @@ async function getInquireBoard(inquireBoardId) {
     }
   }
 }
+watchEffect(
+  () => getInquireBoard(route.params.inquireBoardId)
+)
 
+/**
+ * 문의게시판 검색페이지로 이동
+ */
 function goList() {
   router.push(
       {
@@ -73,6 +81,10 @@ function goList() {
       })
 }
 
+/**
+ * 게시글 삭제
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function deleteBoard() {
   const response = await deleteInquireBoardByAdminApi(route.params.inquireBoardId)
     .catch(() => {dialog.value.board = true})
@@ -82,6 +94,10 @@ async function deleteBoard() {
   }
 }
 
+/**
+ * 문의 응답 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submitAnswer() {
   const response = await createInquireBoardAnswerApi(inquireAnswerForm.value, route.params.inquireBoardId)
     .catch(() => {dialog.value.createAnswer = true})
@@ -92,6 +108,11 @@ async function submitAnswer() {
   }
 }
 
+/**
+ * 문의 응답 삭제
+ * @param inquireAnswerId 문의 답변 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function deleteAnswer(inquireAnswerId) {
   const response = await deleteInquireBoardAnswerApi(inquireAnswerId)
     .catch(() => {dialog.value.deleteAnswer = true})

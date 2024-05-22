@@ -8,7 +8,7 @@ import {ref, watchEffect} from "vue";
 import {editFreeBoardApi, getFreeBoardApi, getFreeBoardCategoriesApi, getFreeBoardFilesApi} from "@/apis/main-api.js";
 import {useRoute} from "vue-router";
 import router from "@/router";
-import {FREE_BOARD_LIST_ROUTER_NAME, FREE_BOARD_VIEW_ROUTER_NAME} from "@/constant/routeNames.js";
+import {FREE_BOARD_LIST_ROUTER_NAME} from "@/constant/routeNames.js";
 import {contentRule, titleRule} from "@/compositor/rules";
 import SubmitButton from "@/components/button/SubmitButton.vue";
 import ButtonDialog from "@/components/dialog/ButtonDialog.vue";
@@ -24,12 +24,18 @@ const dialog = ref({
   file: null
 })
 
+
 const categoryList = ref([])
+/**
+ * 자유게시판 카테고리를 조회하여 가져온다.
+ * @returns {Promise<void>} 응답결과를 categoryList에 반환
+ */
 async function getCategories() {
   const response = await getFreeBoardCategoriesApi()
   categoryList.value = response.data.categories
 }
 getCategories()
+
 
 const freeBoard = ref({
   category: '',
@@ -42,13 +48,20 @@ const files = ref([{
   originalName: ''
 }]);
 
+/**
+ * 게시글 식별자에 해당하는 게시글과 파일을 가져온다.
+ */
 watchEffect(
-    () => getFreeBoard(route.params.freeBoardId)
-)
-watchEffect(
-    () => getFiles()
-)
+    () => {
+      getFreeBoard(route.params.freeBoardId)
+      getFiles(route.params.freeBoardId)
+})
 
+/**
+ * 자유게시판 게시글 조회
+ * @param freeBoardId 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getFreeBoard(freeBoardId) {
   const response = await getFreeBoardApi(freeBoardId);
 
@@ -57,9 +70,17 @@ async function getFreeBoard(freeBoardId) {
   }
 }
 
-async function getFiles() {
-  const response = await getFreeBoardFilesApi(route.params.freeBoardId)
-  files.value = response.data
+/**
+ * 자유게시판 게시글의 파일 조회
+ * @param freeBoardId 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
+async function getFiles(freeBoardId) {
+  const response = await getFreeBoardFilesApi(freeBoardId)
+
+  if (response){
+    files.value = response.data
+  }
 }
 
 
@@ -71,6 +92,10 @@ const boardEditResponse = ref({
   }
 });
 
+/**
+ * 자유게시판 게시글 수정 폼 제출
+ * @returns {Promise<void>} 서버 응답값(파일 성공, 실패 포함)
+ */
 async function submit() {
   const files = fileFormData.value.map(obj => obj.file)
   const deleteIds = deleteFileIds.value.filter(id => !!id)
@@ -83,6 +108,8 @@ async function submit() {
     dialog.value.file = true;
   }
 }
+
+
 
 watchEffect(
   () => {
@@ -107,6 +134,11 @@ const fileFormData = ref([
     file: undefined
   }])
 
+/**
+ * 저장할 파일 추가
+ * @param number 파일 식별자
+ * @param file 파일
+ */
 function fileChange(number, file) {
   fileFormData.value.filter(obj => obj.number === number)
     .map(obj => obj.file = file)
@@ -123,6 +155,11 @@ function fileChange(number, file) {
 
 
 const deleteFileIds= ref([])
+
+/**
+ * 삭제할 파일 추가
+ * @param fileId 파일 식별자
+ */
 function addDeleteFileId(fileId) {
   deleteFileIds.value[fileId] = deleteFileIds.value[fileId] ? null : fileId
 }

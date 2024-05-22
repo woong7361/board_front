@@ -21,6 +21,10 @@ const writeFormData = ref({
     }
 )
 
+/**
+ * 문의게시판 생성폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   const response = await createInquireBoardApi(writeFormData.value)
       .catch(() => {dialog.value = true})
@@ -33,6 +37,9 @@ async function submit() {
   }
 }
 
+/**
+ * 검색 페이지로 이동
+ */
 function goList() {
   router.push({
         name: INQUIRE_BOARD_LIST_ROUTER_NAME

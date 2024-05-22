@@ -25,6 +25,10 @@ const dialog = ref({
 
 const categoryList = ref([])
 
+/**
+ * 자유게시판 카테고리 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getCategories() {
   const response = await getFreeBoardCategoriesApi()
   categoryList.value = response.data.categories
@@ -32,13 +36,13 @@ async function getCategories() {
 }
 getCategories()
 
+
+
 const writeFormData = ref({
   category : '',
   title : '',
   content: '',
 })
-
-
 const boardCreateResponse = ref({
   freeBoardId: '',
   fileResult: {
@@ -46,6 +50,11 @@ const boardCreateResponse = ref({
     fails: [],
   }
 });
+
+/**
+ * 자유게시판 생성 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   const files = fileFormData.value.map(obj => obj.file)
 
@@ -67,6 +76,7 @@ watchEffect(
       });
 }})
 
+
 const fileNumber = ref(3)
 const fileFormData = ref([
   {
@@ -80,6 +90,11 @@ const fileFormData = ref([
     file: undefined
 }])
 
+/**
+ * 파일 변경 감지
+ * @param number 파일 식별자
+ * @param file 파일
+ */
 function fileChange(number, file) {
   fileFormData.value.filter(obj => obj.number === number)
     .map(obj => obj.file = file)
@@ -93,6 +108,7 @@ function fileChange(number, file) {
   }
   fileNumber.value += 1
 }
+
 </script>
 
 <template>

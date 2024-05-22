@@ -11,7 +11,6 @@ import router from "@/router";
 import {NOTICE_BOARD_LIST_ROUTER_NAME, NOTICE_BOARD_VIEW_ROUTER_NAME} from "@/constant/routeNames";
 
 const route = useRoute()
-const memberStore = useMemberStore()
 
 const dialog = ref(false)
 
@@ -27,16 +26,24 @@ const noticeBoard = ref({
   memberId: ''
 })
 
-watchEffect(
-    () => getNoticeBoard(route.params.noticeBoardId)
-)
 
+/**
+ * 공지 게시판 게시글 조회
+ * @param noticeBoardId 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getNoticeBoard(noticeBoardId) {
   const response = await getNoticeBoardApi(noticeBoardId)
 
   noticeBoard.value = response.data
 }
+watchEffect(
+  () => getNoticeBoard(route.params.noticeBoardId)
+)
 
+/**
+ * 공지 게시판 검색 페이지로 이동
+ */
 function goList() {
   router.push({
     name: NOTICE_BOARD_LIST_ROUTER_NAME,

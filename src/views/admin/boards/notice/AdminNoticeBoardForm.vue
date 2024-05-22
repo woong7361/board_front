@@ -15,6 +15,11 @@ import {getFreeBoardCategoriesApi, getNoticeBoardCategoriesApi} from "@/apis/mai
 const formValidate = ref(false)
 const dialog = ref(false)
 
+
+/**
+ * 공지 게시판 카테고리 조회
+ * @type {Ref<UnwrapRef<*[]>>} 서버 응답값
+ */
 const categoryList = ref([])
 async function getCategories() {
   const response = await getNoticeBoardCategoriesApi()
@@ -23,6 +28,7 @@ async function getCategories() {
 }
 getCategories()
 
+
 const writeFormData = ref({
   category: '',
   title: '',
@@ -30,6 +36,10 @@ const writeFormData = ref({
   isFixed: false
 })
 
+/**
+ * 공지 게시글 생성 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   const response = await createNoticeBoardByAdminApi(writeFormData.value)
     .catch(() => {dialog.value = true})

@@ -17,16 +17,11 @@ const route = useRoute()
 const formValidate = ref(false)
 const dialog = ref(false)
 
-const inquireBoard = ref({
-  title: '',
-  content: '',
-  isSecret: false,
-})
-
-watchEffect(
-  () => getInquireBoard(route.params.inquireBoardId)
-)
-
+/**
+ * 문의게시판 조회
+ * @param inquireBoardId 문의게시판 게시글 식별자
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getInquireBoard(inquireBoardId) {
   const response = await getInquireBoardApi(inquireBoardId)
 
@@ -35,7 +30,24 @@ async function getInquireBoard(inquireBoardId) {
   }
 }
 
+/**
+ * 게시글 식별자에 대한 문의게시판 조회
+ */
+watchEffect(
+  () => getInquireBoard(route.params.inquireBoardId)
+)
 
+
+const inquireBoard = ref({
+  title: '',
+  content: '',
+  isSecret: false,
+})
+
+/**
+ * 문의게시판 게시글 수정폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   const response = await editInquireBoardApi(inquireBoard.value, route.params.inquireBoardId)
       .catch(() => {dialog.value = true})

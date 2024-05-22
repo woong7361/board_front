@@ -29,7 +29,10 @@ function goSignUp() {
   })
 }
 
-
+/**
+ * 로그인 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   let response = await memberSignInApi(loginRequest.value)
     .catch(() => {dialog.value = true});

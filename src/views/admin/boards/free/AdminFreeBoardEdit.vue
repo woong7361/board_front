@@ -30,8 +30,10 @@ const dialog = ref({
   file: null
 })
 
-
 const categoryList = ref([])
+/**
+ * 자유게시판 카테고리 조회
+ */
 async function getCategories() {
   const response = await getFreeBoardCategoriesApi()
   categoryList.value = response.data.categories
@@ -56,6 +58,11 @@ watchEffect(
     () => getFiles()
 )
 
+/**
+ * 자유게시판 게시글 조회
+ * @param freeBoardId
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getFreeBoard(freeBoardId) {
   const response = await getFreeBoardApi(freeBoardId);
 
@@ -64,6 +71,10 @@ async function getFreeBoard(freeBoardId) {
   }
 }
 
+/**
+ * 자유게시판 게시글의 파일 조회
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function getFiles() {
   const response = await getFreeBoardFilesApi(route.params.freeBoardId)
   files.value = response.data
@@ -77,6 +88,10 @@ const boardEditResponse = ref({
   }
 });
 
+/**
+ * 자유게시판 게시글 수정 폼 제출
+ * @returns {Promise<void>} 서버 응답값
+ */
 async function submit() {
   const files = fileFormData.value.map(obj => obj.file)
   const deleteIds = deleteFileIds.value.filter(id => !!id)
@@ -113,6 +128,11 @@ const fileFormData = ref([
     file: undefined
   }])
 
+/**
+ * 저장할 파일 추가
+ * @param number 파일 식별자
+ * @param file 파일
+ */
 function fileChange(number, file) {
   fileFormData.value.filter(obj => obj.number === number)
     .map(obj => obj.file = file)
@@ -129,6 +149,11 @@ function fileChange(number, file) {
 
 
 const deleteFileIds= ref([])
+
+/**
+ * 삭제할 파일 추가
+ * @param fileId 파일 식별자
+ */
 function addDeleteFileId(fileId) {
   deleteFileIds.value[fileId] = deleteFileIds.value[fileId] ? null : fileId
 }

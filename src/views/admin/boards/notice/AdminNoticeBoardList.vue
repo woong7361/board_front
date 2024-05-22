@@ -40,12 +40,6 @@ const searchParams = ref({
   orderType: null
 })
 
-const categories = ref([])
-
-watchEffect(
-    () => getFixedNoticeBoards()
-)
-
 watchEffect(
     () => {
       route.query.size = route.query.size ? route.query.size : '5'
@@ -56,6 +50,10 @@ watchEffect(
     }
 )
 
+/**
+ * 고정 공지 게시글 조회
+ * @return {Promise<void>} 서버 응답값
+ */
 async function getFixedNoticeBoards() {
   const response = await getFixedNoticeBoardsApi()
 
@@ -63,17 +61,33 @@ async function getFixedNoticeBoards() {
     fixedNoticeBoards.value = response.data.fixedNoticeBoards;
   }
 }
+watchEffect(
+  () => getFixedNoticeBoards()
+)
 
+/**
+ * 공지 게시글 검색
+ * @param params 검색 파라미터
+ * @return {Promise<void>} 서버 응답값
+ */
 async function getNoneFixedNoticeBoards(params) {
   const response = await getNoneFixedNoticeBoardsApi(params)
 
   noneFixedNoticeBoards.value = response.data
 }
 
+const categories = ref([])
+/**
+ * 공지게시판 카테고리 조회
+ * @return promise 서버 응답값
+ */
 async function getCategories() {
   categories.value = await getNoticeBoardCategories()
 }
 
+/**
+ * 검색시 검색 페이지 리로딩
+ */
 function search() {
   const startDate = adapter.toISO(searchParams.value.startDate)
   const endDate = adapter.toISO(adapter.addDays(searchParams.value.endDate, 1))
@@ -88,7 +102,10 @@ function search() {
   })
 }
 
-
+/**
+ * 상세보기 페이지로 이동
+ * @param noticeBoardId 게시글 식별자
+ */
 function goDetail(noticeBoardId) {
 
   router.push({
@@ -98,6 +115,10 @@ function goDetail(noticeBoardId) {
   })
 }
 
+/**
+ * 검색 페이지 이동
+ * @param pageNum 페이지 넘버
+ */
 function goPage(pageNum) {
   router.push({
     name: ADMIN_NOTICE_BOARD_LIST_ROUTER_NAME,
@@ -108,6 +129,9 @@ function goPage(pageNum) {
   })
 }
 
+/**
+ * 공지 생성 페이지로 이동
+ */
 function goCreate() {
   router.push({
     name: ADMIN_NOTICE_BOARD_FORM_ROUTER_NAME,

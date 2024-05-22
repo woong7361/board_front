@@ -116,7 +116,7 @@ function goInquireBoard() {
 
 <template>
 
-  <v-card variant="flat" max-width="1200" class="mx-auto mt-9 mb-16 pb-16">
+  <v-card variant="flat" max-width="1500" class="mx-auto mt-9 mb-16 pb-16">
     <v-img
       class="mb-4"
       height="150"
@@ -125,7 +125,7 @@ function goInquireBoard() {
     <VRow class="match-height">
         <VCol
           cols="12"
-          md="6"
+          md="4"
         >
           <VCard class="position-relative" variant="elevated" elevation="5"  min-height="400">
               <v-card>
@@ -166,7 +166,7 @@ function goInquireBoard() {
         </VCol>
       <VCol
         cols="12"
-        md="6"
+        md="4"
       >
         <VCard class="position-relative" variant="elevated" elevation="5" min-height="400">
           <v-card>
@@ -208,7 +208,7 @@ function goInquireBoard() {
       </VCol>
       <VCol
         cols="12"
-        md="6"
+        md="4"
       >
         <VCard class="position-relative" variant="elevated" elevation="5" min-height="400">
           <v-card>
@@ -245,14 +245,6 @@ function goInquireBoard() {
               </tbody>
             </v-table>
           </v-card>
-        </VCard>
-      </VCol>
-      <VCol
-        cols="12"
-        md="6"
-      >
-        <VCard class="position-relative" variant="elevated" elevation="5" min-height="400">
-          <v-card-title>?</v-card-title>
         </VCard>
       </VCol>
     </VRow>
